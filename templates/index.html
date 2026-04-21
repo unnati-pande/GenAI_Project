@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NL to SQL Prompt Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+          <div class="topbar">
+            <a class="link-button" href="{{ url_for('reference') }}">Input Reference</a>
+          </div>
+          <h1>Input and Output</h1>
+          <p class="lead">Enter your request and view only the generated prompt or SQL output.</p>
+          <form method="post">
+            <div>
+              <label for="request">Input</label>
+              <textarea id="request" name="request" placeholder="Example: Show total sales for each user in 2025">{{ request_text }}</textarea>
+            </div>
+            <div class="row">
+              <div>
+                <label for="mode">Mode</label>
+                <select id="mode" name="mode">
+                  <option value="prompt_only" {% if mode == 'prompt_only' %}selected{% endif %}>Build prompt only</option>       
+                  <option value="generate_sql" {% if mode == 'generate_sql' %}selected{% endif %}>Generate SQL with OpenAI</option> 
+                </select>
+              </div>
+              <div>
+                <label for="draft">Prompt draft</label>
+                <select id="draft" name="draft">
+                  {% for key, draft in draft_options.items() %} 
+                  <option value="{{ key }}" {% if selected_draft == key %}selected{% endif %}>{{ draft.label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label for="model">Model</label>
+                <input id="model" name="model" value="{{ model }}" placeholder="gpt-5.4">
+              </div>
+              <div>
+                <label for="temperature">Temperature</label>
+                <input id="temperature" name="temperature" value="{{ temperature }}" placeholder="0.2">
+              </div>
+            </div>
+            <button type="submit">Run</button>
+          </form>
+
+          <div class="subtle-card" style="margin-top: 16px;">
+            <h3 class="section-title">Settings</h3>
+            <p class="note"><strong>{{ draft_details.label }}</strong></p>
+            <p class="note">{{ draft_details.summary }}</p>
+            <p class="note">Use a low temperature like 0.0 to 0.2 for stable SQL. Higher values can drift and invent columns.</p>
+          </div>
+
+          {% if error_message %}
+          <div class="callout" style="margin-top: 16px;">{{ error_message }}</div>
+          {% endif %}
+
+          {% if output_text %}
+          <div class="stack" style="margin-top: 18px;">
+            <div>
+              <h3 class="section-title">{{ output_title }}</h3>
+              <pre>{{ output_text }}</pre>
+            </div>
+          </div>
+          {% endif %}
+      </section>
+    </main>
+  </body>
+</html>

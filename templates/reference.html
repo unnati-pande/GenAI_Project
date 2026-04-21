@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Input Reference</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <a class="back-link" href="/">Back to Main Page</a>
+        <h1>Input Reference</h1>
+        <p class="lead">Use these sample inputs when testing prompt generation or SQL generation.</p>
+        <div class="stack">
+          {% for example in input_examples %}
+          <article class="example">
+            <span class="label">{{ example.title }}</span>
+            <div class="input-box">{{ example.input }}</div>
+            <p class="note">{{ example.note }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
